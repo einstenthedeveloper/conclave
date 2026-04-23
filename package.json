@@ -33,11 +33,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/talarion/conclave"
+    "url": "https://github.com/einstenrodriguesdev/conclave"
   },
-  "homepage": "https://github.com/talarion/conclave#readme",
+  "homepage": "https://github.com/einstenrodriguesdev/conclave#readme",
   "bugs": {
-    "url": "https://github.com/talarion/conclave/issues"
+    "url": "https://github.com/einstenrodriguesdev/conclave/issues"
   },
   "engines": {
     "node": ">=18"
