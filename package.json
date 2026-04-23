@@ -1,0 +1,45 @@
+{
+  "name": "conclave-cc",
+  "version": "0.3.0",
+  "description": "Agentic business orchestration framework for solo founders. Installs the full Conclave agent system globally in Claude Code — Chairman, CEO, domain C-levels, HR, Social Media Manager, and Traffic Manager — producing a VC-ready due diligence document package.",
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "files": [
+    "agents/",
+    "commands/",
+    "templates/",
+    "ROLES/",
+    "ARCHITECTURE.md",
+    "ORCHESTRATION.md",
+    "install.js",
+    "README.md"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "agent",
+    "framework",
+    "conclave",
+    "due-diligence",
+    "startup",
+    "hr",
+    "social-media",
+    "traffic",
+    "workflow",
+    "orchestration"
+  ],
+  "author": "Talarion",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talarion/conclave"
+  },
+  "homepage": "https://github.com/talarion/conclave#readme",
+  "bugs": {
+    "url": "https://github.com/talarion/conclave/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
