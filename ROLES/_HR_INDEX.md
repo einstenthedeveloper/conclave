@@ -8,7 +8,16 @@
 
 | Role | Agent File | Status | Version | Researched On | Next Review |
 |---|---|---|---|---|---|
-| Social Media Manager | agents/social-media-manager.md | APPROVED | 1.0 | 2026-04-23 | 2026-07-23 |
+| Chairman | agents/chairman.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| CEO | agents/ceo.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| CTO | agents/cto.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| CMO | agents/cmo.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| CRO | agents/cro.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| CLO | agents/clo.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| CISO | agents/ciso.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| Design CTO | agents/design-cto.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| Traffic Manager | agents/traffic-manager.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
+| Social Media Manager | agents/social-media-manager.md | APPROVED | 1.0 | 2026-04-24 | 2026-07-24 |
 
 ---
 
@@ -41,4 +50,13 @@ Early review trigger: if the market changes significantly in the role's domain (
 
 | Date | Role | Action | Result |
 |---|---|---|---|
-| 2026-04-23 | Social Media Manager | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/social-media-manager.md created |
+| 2026-04-24 | Chairman | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/chairman.md created |
+| 2026-04-24 | CEO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/ceo.md created |
+| 2026-04-24 | CTO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/cto.md created |
+| 2026-04-24 | CMO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/cmo.md created |
+| 2026-04-24 | CRO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/cro.md created |
+| 2026-04-24 | CLO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/clo.md created |
+| 2026-04-24 | CISO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/ciso.md created |
+| 2026-04-24 | Design CTO | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/design-cto.md created |
+| 2026-04-24 | Traffic Manager | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/traffic-manager.md created |
+| 2026-04-24 | Social Media Manager | Research + synthesis + compilation | APPROVED — 9/9 checklist, agents/social-media-manager.md created |

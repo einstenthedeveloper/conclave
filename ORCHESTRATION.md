@@ -21,7 +21,7 @@ PRODUCT.md          owner=DESIGN_CTO        required=false    stage=conditional
 FINANCE.md          owner=CFO               required=false    stage=post_mvp
 
 ## OPERATIONAL REGISTRY (not in main pipeline — activated by founder or CMO)
-execution_log.json  owner=SOCIAL_MEDIA_MANAGER  required=false  stage=operational
+content_batch.md    owner=SOCIAL_MEDIA_MANAGER  required=false  stage=operational
 ROLES/[role].md     owner=HR                    required=false  stage=on_demand
 
 ## DEPENDENCY MAP

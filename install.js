@@ -29,7 +29,7 @@ try {
     console.log(`✓ Copied commands/${file} → ${dest}`);
   }
 
-  for (const systemDoc of ['ARCHITECTURE.md', 'ORCHESTRATION.md']) {
+  for (const systemDoc of ['ARCHITECTURE.md', 'ORCHESTRATION.md', 'CONCLAVE_SYSTEM.md']) {
     const src = path.join(pkgDir, systemDoc);
     const dest = path.join(claudeDir, systemDoc);
     fs.copyFileSync(src, dest);

@@ -40,7 +40,7 @@ The system operates at the business coherence layer: vision, ICP, moat, revenue,
 | **CISO** | Security & trust | `VISION.md` + `TECH.md` | `SECURITY.md` | Security-sensitive product |
 | **Design CTO** | Experience layer | `VISION.md` + `GTM.md` | `PRODUCT.md` | UX-critical for conversion |
 | **Traffic Manager** | Acquisition sequencing | `VISION.md` + `GTM.md` | `TRAFFIC.md` | Distribution defined, no channel execution plan |
-| **Social Media Manager** | Organic content execution | `BRAND.md` + `GTM.md` | `execution_log.json` + weekly report | BRAND.md exists + GTM.md defines organic channel |
+| **Social Media Manager** | Organic content execution | `GTM.md` + `PRODUCT.md` | Weekly content batch + engagement report | GTM.md exists + organic channel in acquisition motion |
 | **HR** | Role research & compilation | Role name (input) | `ROLES/[role].md` + `agents/[role].md` | Founder or CEO needs new role; substance audit; 90-day revision |
 | **CFO** | Finance & valuation | All documents | `FINANCE.md` | Funding intent = yes (post-MVP) |
 
@@ -165,7 +165,7 @@ EXECUTION_PLAN.md      ← CEO (always second)
 FINANCE.md             ← CFO (post-MVP only)
 
 [Operational — not in primary pipeline]
-execution_log.json + weekly report  ← Social Media Manager (requires BRAND.md + GTM.md)
+Weekly content batch + engagement report  ← Social Media Manager (requires GTM.md)
 agents/[role].md                    ← HR (activated by founder, not CEO pipeline)
 ```
 
