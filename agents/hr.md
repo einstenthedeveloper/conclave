@@ -80,6 +80,12 @@ Also search: "mcp server [domain of role]"
 Classify each tool: ESSENTIAL / HIGH VALUE / OPTIONAL
 Map to `tools:` frontmatter array.
 
+**Pre-installed MCPs — do NOT instruct installation for these:**
+- `conclave-usage-mcp` — token budget awareness. Installed by Conclave package. Available to all agents via `usage/current` tool.
+- `interface-controller` — browser/UI automation (Python MCP server). Installed optionally by Conclave package. Relevant to: Social Media Manager, Traffic Manager, any agent that interacts with web interfaces. Mark as ESSENTIAL for those roles but note: "included in Conclave package — run `claude mcp add interface-controller python ~/.claude/interface-controller/server.py` to activate."
+
+For all other MCPs: classify normally and include install command.
+
 **Step 6 — Domain knowledge mapping**
 Read `~/.claude/knowledge/INDEX.md` if it exists.
 List the domain knowledge areas this role operates in (e.g., paid traffic, funnel design, system architecture, threat modeling).
