@@ -8,15 +8,17 @@ try {
   const commandsDir = path.join(claudeDir, 'commands');
   const skillsDir = path.join(commandsDir, 'skills');
   const knowledgeDir = path.join(claudeDir, 'knowledge');
+  const docsDir = path.join(claudeDir, 'docs');
   const pkgDir = __dirname;
 
   // Ensure directories
-  for (const dir of [agentsDir, commandsDir, skillsDir, knowledgeDir]) {
+  for (const dir of [agentsDir, commandsDir, skillsDir, knowledgeDir, docsDir]) {
     fs.mkdirSync(dir, { recursive: true });
   }
   console.log(`✓ Ensured ~/.claude/agents/`);
   console.log(`✓ Ensured ~/.claude/commands/skills/`);
   console.log(`✓ Ensured ~/.claude/knowledge/`);
+  console.log(`✓ Ensured ~/.claude/docs/`);
 
   // Copy agents/
   for (const file of fs.readdirSync(path.join(pkgDir, 'agents'))) {
@@ -68,10 +70,16 @@ try {
     }
   }
 
-  // Copy system docs to ~/.claude/
-  for (const doc of ['ARCHITECTURE.md', 'ORCHESTRATION.md', 'CONCLAVE_SYSTEM.md']) {
-    fs.copyFileSync(path.join(pkgDir, doc), path.join(claudeDir, doc));
-    console.log(`✓ ${doc}`);
+  // Copy docs/ to ~/.claude/docs/
+  const docsSrc = path.join(pkgDir, 'docs');
+  if (fs.existsSync(docsSrc)) {
+    for (const file of fs.readdirSync(docsSrc)) {
+      const src = path.join(docsSrc, file);
+      if (fs.statSync(src).isFile()) {
+        fs.copyFileSync(src, path.join(docsDir, file));
+        console.log(`✓ docs/${file}`);
+      }
+    }
   }
 
   // Copy templates to cwd (skip existing)
@@ -106,12 +114,12 @@ try {
   console.log('  1. Register the usage MCP (one-time):');
   console.log('     claude mcp add conclave-usage -- node ~/.claude/conclave-usage-mcp/src/index.js');
   console.log('');
-  console.log('  2. Set your plan limit in CONCLAVE_SYSTEM.md:');
+  console.log('  2. Set your plan limit in ~/.claude/docs/CONCLAVE_SYSTEM.md:');
   console.log('     PLAN_LIMIT: 44000   ← Pro plan');
   console.log('     PLAN_LIMIT: 88000   ← Max5 plan');
   console.log('     PLAN_LIMIT: 220000  ← Max20 plan');
   console.log('');
-  console.log('  3. Start a session: /conc "your project intention"');
+  console.log('  3. Start a session: /conc');
   console.log('');
   console.log('  Optional: register interface-controller for Social Media Manager automation:');
   console.log('     claude mcp add interface-controller python ~/.claude/interface-controller/server.py');

@@ -100,7 +100,7 @@ For specialists: flag GAPs explicitly in the report, but do not block compilatio
 After completing all 5 search steps:
 
 1. Read `ROLES/_SCHEMA.md` to get the template.
-2. Read `ARCHITECTURE.md` to understand how the role fits in the system.
+2. Read `~/.claude/docs/ARCHITECTURE.md` to understand how the role fits in the system.
 3. Read `~/.claude/commands/skills/` — list existing process skills. Identify which ones this role uses.
    Read `~/.claude/knowledge/INDEX.md` — list existing domain knowledge docs. Cross-reference with Step 6 findings: mark each knowledge area as EXISTING or GAP.
 4. Fill every field in the schema. No field left blank or marked "TBD".
@@ -138,7 +138,7 @@ After completing all 5 search steps:
 
 Only execute if status = APPROVED.
 
-Read an existing compiled agent (e.g., `agents/cmo.md`) as format reference. Compile `agents/[role-slug].md` with:
+No existing compiled agent to use as reference (genesis build). Use this canonical template. Compile `agents/[role-slug].md` with:
 
 ```
 ---
@@ -154,14 +154,14 @@ permissionMode: acceptEdits
 ---
 
 **IDENTITY**
-[Mission + hierarchy level (C-level or specialist) + activation criteria]
+[Mission + hierarchy level (Board / C-level / Specialist) + activation criteria]
 
 **SKILLS**
-[Process skill files from commands/skills/ — with when to load each]
+[Process skill files from ~/.claude/commands/skills/ — with when to load each]
 
 **DOMAIN KNOWLEDGE**
-[Domain knowledge docs from knowledge/ — REQUIRED/CONTEXTUAL classification with load trigger.
-Format: `knowledge/[doc-name].md` — REQUIRED/CONTEXTUAL — [1-line: when to load]]
+[Domain knowledge docs from ~/.claude/knowledge/ — REQUIRED/CONTEXTUAL classification with load trigger.
+Format: `~/.claude/knowledge/[doc-name].md` — REQUIRED/CONTEXTUAL — [1-line: when to load]]
 
 **KNOWLEDGE**
 [Agent-specific strategic notes — what is unique to this role and not covered by knowledge docs. Keep concise: deep content belongs in knowledge/ docs, not here.]
@@ -173,11 +173,22 @@ Format: `knowledge/[doc-name].md` — REQUIRED/CONTEXTUAL — [1-line: when to l
 [Evidence-based failure modes]
 
 **EXECUTION STEPS**
-[Read → load skills → derive → score → ask (max 3) → decide → write → flag → report]
+Step 1: Read ~/.claude/docs/CONCLAVE_SYSTEM.md to load system context.
+Step 2: Read ~/.claude/docs/ARCHITECTURE.md to confirm hierarchy and activation rules.
+Step 3: Read required skills via Read tool from ~/.claude/commands/skills/[skill].md
+Step 4: [Role-specific steps: derive → score → ask (max 3) → decide → write → flag → report]
 
 **[OUTPUT_DOCUMENT].md STRUCTURE**
 [Canonical output structure]
 ```
+
+**System document paths for compiled agents:**
+- System constitution: `~/.claude/docs/CONCLAVE_SYSTEM.md`
+- Architecture blueprint: `~/.claude/docs/ARCHITECTURE.md`
+- Orchestration protocol: `~/.claude/docs/ORCHESTRATION.md`
+- Skills: `~/.claude/commands/skills/[skill].md`
+- Knowledge: `~/.claude/knowledge/[doc].md`
+- Role index: `~/.claude/ROLES/_HR_INDEX.md` (written to project dir)
 
 **90-DAY REVIEW SCHEDULING**
 

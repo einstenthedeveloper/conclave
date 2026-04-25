@@ -9,12 +9,10 @@
     "agents/",
     "commands/",
     "conclave-usage-mcp/",
+    "docs/",
     "knowledge/",
     "templates/",
     "ROLES/",
-    "ARCHITECTURE.md",
-    "ORCHESTRATION.md",
-    "CONCLAVE_SYSTEM.md",
     "install.js",
     "README.md"
   ],
