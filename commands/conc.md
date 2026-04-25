@@ -13,6 +13,9 @@ Read `conclave-queue.json` if it exists.
 If `queue` array has entries with `status: "pending"` and `scheduled_for` ≤ today:
   Execute each pending task in order before continuing.
   Update each entry to `status: "done"` after execution.
+If any entries have `type: "agent-build"` and `status: "pending"`:
+  Report count and next slug. Instruct founder: "Run `/loop /build` to continue the agent build queue."
+  Do NOT auto-execute build tasks from /conc — they run via /build loop only.
 
 **Step 2 — State recovery**
 Read `EXECUTION_PLAN.md` if it exists.
