@@ -49,34 +49,45 @@ The system operates at the business coherence layer: vision, ICP, moat, revenue,
 ## 4. Activation Flow
 
 ```
-/conclave
+Founder
 │
-├── [1] CHAIRMAN
-│     Input:  founder (live conversation)
-│     Output: VISION.md
-│     Rules:  Layer A (intent) → Layer B (operational context)
-│             Sovereignty Filter applied to every signal
-│             Writes "Signals for CEO Activation" block
+├── /conclave → [1] CHAIRMAN  [board level — initiation + periodic review]
+│                   Input:  founder (live conversation)
+│                   Output: VISION.md
+│                   Rules:  Layer A (intent) → Layer B (assumption challenge)
+│                           Sovereignty Filter applied to every signal
+│                           Writes "Signals for CEO Activation" block
+│                           Review mode: triggered quarterly, FRAGILE, or kill/pivot
+│                           Never called by CEO — founder-only activation
 │
-├── [2] CEO
-│     Input:  VISION.md
-│     Action: reads signals → builds activation plan → activates agents
-│     Rules:  conditional activation only (see Section 5)
-│             resolves dependency order between agents
-│             validates consistency between agent outputs
-│             does not write domain documents — only orchestrates
+├── VISION.md → [2] CEO  [orchestration layer — per session]
+│                   Input:  VISION.md
+│                   Action: reads signals → builds activation plan → activates C-levels
+│                   Rules:  conditional activation only (see Section 5)
+│                           resolves dependency order between agents
+│                           validates consistency between agent outputs
+│                           does not write domain documents — only orchestrates
 │
-├── [3] AGENTS (sequential by default — parallel only if no dependency overlap)
-│     Each agent:
-│       - reads VISION.md + CEO brief
+├── [3] C-LEVELS  [sectoral strategy — sequential by default, parallel if eligible]
+│     Each C-level:
+│       - reads VISION.md + CEO brief + dependency documents
 │       - derives decisions from documents first
 │       - asks founder only if confidence is low (max 3 binary/constrained questions)
+│       - may consult Specialists for domain validation (CONSULTATION_PROTOCOL)
 │       - writes its output document
-│       - emits a confidence score per decision
+│       - emits confidence score per decision
 │       - flags unresolved hypotheses
 │       - reports summary to CEO
 │
-└── [4] CEO (consolidation pass)
+├── [4] SPECIALISTS  [execution layer — delegated by C-levels, not in main pipeline]
+│     Specialists are activated by:
+│       (a) C-level via CONSULTATION_PROTOCOL — validation only, < 200 tokens
+│       (b) CEO delegating after C-level document is complete
+│       (c) Founder directly — for Q&A or operational tasks
+│     ADVISORY MODE: if parent C-level document is missing, Specialist answers
+│     questions but does not write its output document (see Section 5e)
+│
+└── [5] CEO (consolidation pass)
       - validates consistency across all output documents
       - identifies conflicts and gaps
       - requests revisions if needed
@@ -140,7 +151,29 @@ Agent questions must be binary or constrained. Open-ended questions are forbidde
 
 ## 5d. Iteration Loop
 
-After first sale attempt or experiment failure, the CEO re-activates only the agent whose document covers the failed assumption. VISION.md is never updated in iteration — only a new /conclave session can update it. CEO logs every iteration in EXECUTION_PLAN.md.
+After first sale attempt or experiment failure, the CEO re-activates only the agent whose document covers the failed assumption. VISION.md is never updated in a CEO iteration loop — only the Chairman can update VISION.md, and only in Review mode (triggered quarterly, by FRAGILE status, or by founder request for kill/pivot). CEO logs every iteration in EXECUTION_PLAN.md.
+
+---
+
+## 5e. Specialist Access Rules
+
+Specialists (Traffic Manager, Social Media Manager, and all future operational agents) operate under the following access rules:
+
+**Founder Q&A access** — always allowed. Specialists can answer questions, explain frameworks, and validate hypotheses regardless of pipeline state.
+
+**Full output doc access** — requires parent C-level document to exist:
+- Traffic Manager → requires GTM.md (CMO output)
+- Social Media Manager → requires GTM.md (CMO output)
+- Any future specialist → requires the document owned by its parent C-level
+
+**ADVISORY MODE** — if parent C-level document is missing:
+1. Specialist informs founder: "[Parent doc] not found — operating in advisory mode."
+2. Answers questions freely, explains frameworks, validates ideas
+3. Does NOT write its output document
+4. Recommends: "Run /conclave to initiate the pipeline and generate [parent doc] first."
+5. Stops at Step 3 — does not proceed to its normal Execution Steps
+
+**Why soft-block instead of hard-block:** output docs produced without their parent C-level strategy context will contradict the strategy when it is later produced. Q&A does not create this conflict — it is safe to allow anytime.
 
 ---
 
@@ -255,7 +288,7 @@ All above + SECURITY.md + PRODUCT.md + FINANCE.md
 - No agent writes another agent's document
 - No document is final — change log is mandatory on every update
 - No founder input is assumed — absent signals trigger questions, not invention
-- The Chairman never returns — vision updates require a new /conclave session
+- The Chairman does not update VISION.md during CEO iteration loops — only in Review mode (quarterly, FRAGILE, or founder-triggered kill/pivot)
 - CFO never activates before first sale
 
 ---

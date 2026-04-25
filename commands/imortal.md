@@ -1,28 +1,30 @@
-# /build
+# /imortal
 
-Continuous build loop for Conclave agents. Uses HR to research and compile agents from the
-queue. Self-paces via ScheduleWakeup based on token budget. Designed to run inside `/loop`.
+Continuous build engine for the Conclave agent library. Manages its own ScheduleWakeup loop —
+no `/loop` wrapper needed. Uses HR to research and compile agents from the queue.
+State survives compaction: lives in `conclave-queue.json`, not in context.
 
 **Entry points:**
-- `/loop /build` — starts the continuous build loop (recommended)
-- `/build [agent-slug]` — builds one specific agent, no loop
-- `/build queue` — shows queue status without building
+- `/imortal` — starts the continuous build engine (self-pacing via ScheduleWakeup)
+- `/imortal init` — populates conclave-queue.json from the organogram research file
+- `/imortal status` — current build progress, no building
+- `/imortal [agent-slug]` — builds one specific agent, no loop
 
 ---
 
 ## LOOP PROTOCOL
 
-Executes on every ScheduleWakeup fire when running via `/loop /build`.
+Executes on every ScheduleWakeup fire (prompt: `/imortal`).
 
 **Step 1 — Read queue**
 
 Read `conclave-queue.json` in the current working directory.
 Find all entries where `status: "pending"` AND `type: "agent-build"`.
-Sort by `scheduled_for` ascending (oldest first).
+Sort by `priority` ascending, then `scheduled_for` ascending (P0 first, oldest first within tier).
 
 If no pending entries found:
 - Report: "Build queue empty. All agents completed."
-- Do NOT call ScheduleWakeup. Loop ends here.
+- Do NOT call ScheduleWakeup. Engine stops here.
 
 **Step 2 — Check token budget**
 
@@ -30,8 +32,8 @@ Call `usage/current` via the conclave-usage-mcp MCP tool.
 
 If `recommendation = "pause"` (percent_used ≥ 85):
 - Report: "Token budget at [percent]% — pausing build. Will retry in 30 min."
-- Write current agent slug to `conclave-queue.json` entry as `status: "pending"` (no change)
-- ScheduleWakeup(1800, "token budget near limit — retrying build loop")
+- Leave current queue entry as `status: "pending"` (no change)
+- ScheduleWakeup(1800, "token budget near limit — retrying /imortal")
 - STOP. Do not activate HR.
 
 If `recommendation = "sequential_warn"` (70–84%):
@@ -76,15 +78,15 @@ Pick ScheduleWakeup delay:
 |---|---|---|
 | < 70 | 90s | "continuing build — next: [next-slug]" |
 | 70–84 | 180s | "budget warning — pacing — next: [next-slug]" |
-| ≥ 85 | 1800s | "budget near limit — pausing build loop" |
+| ≥ 85 | 1800s | "budget near limit — pausing /imortal" |
 
-Call ScheduleWakeup with delay, reason, and prompt: `/build`
+Call ScheduleWakeup with delay, reason, and prompt: `/imortal`
 
 ---
 
 ## SINGLE AGENT PROTOCOL
 
-When called as `/build [agent-slug]` (no loop):
+When called as `/imortal [agent-slug]` (no loop):
 
 1. Check if `agents/[agent-slug].md` already exists → if yes, ask: re-research or audit?
 2. Call `usage/current` — if `pause`, warn and ask user to confirm before continuing
@@ -93,22 +95,36 @@ When called as `/build [agent-slug]` (no loop):
 
 ---
 
-## QUEUE STATUS PROTOCOL
+## STATUS PROTOCOL
 
-When called as `/build queue`:
+When called as `/imortal status`:
 
-Read `conclave-queue.json`. Report:
+Read `conclave-queue.json`. Call `usage/current`. Report:
 
 ```
-Build Queue Status
-──────────────────
+/imortal — Build Engine Status
+──────────────────────────────
 Completed : [N] agents
 In progress: [slug or none]
-Pending   : [N] agents — next: [slug]
+Pending   : [N] agents — next: [slug] (P[priority])
 Draft     : [N] agents (gaps identified, awaiting fix)
 
 Token budget: [percent]% used ([recommendation])
+
+Next action: /imortal to resume | /imortal [slug] to build specific agent
 ```
+
+---
+
+## INIT PROTOCOL
+
+When called as `/imortal init`:
+
+1. Read the organogram research file at `D:/conclave/organagram-research.md` — extract agent list and priority order from the "## CONCLAVE SYSTEM — ARCHITECTURE REFERENCE" section (Agent Inventory table)
+2. Read `conclave-queue.json` — skip agents already marked done or in_progress
+3. Read `ROLES/_HR_INDEX.md` — skip agents already in the Active table
+4. Write all remaining agents as pending entries to `conclave-queue.json`
+5. Report: total queued, already built, priority breakdown
 
 ---
 
@@ -129,30 +145,15 @@ Token budget: [percent]% used ([recommendation])
 }
 ```
 
-Priority field: 0 = P0 (pre-seed critical), 1 = P1, 2 = P2, 3 = P3.
-Queue is sorted by priority ascending, then scheduled_for ascending.
-
----
-
-## Initializing the queue
-
-To populate `conclave-queue.json` with the full 118-agent build plan from the organagram,
-run: `/build init` — reads `D:/conclave/organagram-research.md` (or the workspace research
-file) and generates all pending entries sorted by priority.
-
-**Step-by-step for `/build init`:**
-1. Read the organagram research file to get the priority-ordered agent list
-2. Read `conclave-queue.json` — skip agents already marked done or in index
-3. Read `ROLES/_HR_INDEX.md` — skip agents already in Active table
-4. Write all remaining agents as pending entries to `conclave-queue.json`
-5. Report: total queued, already built, estimated sessions needed at current plan
+Priority field: 0 = P0 (board + C-level core), 1 = P1 (operational specialists), 2 = P2 (scale specialists), 3 = P3 (enterprise/context-specific).
+Queue sorted by priority ascending, then scheduled_for ascending.
 
 ---
 
 ## Notes
 
 - The loop is resilient to compaction: state lives in `conclave-queue.json`, not in context.
-  After any compaction or manual session restart, `/loop /build` picks up from the same file.
-- `/conc` Step 1 already checks `conclave-queue.json` for pending tasks — so a new session
-  will surface build tasks automatically.
-- HR is the sole builder. `/build` is the scheduler and state manager only.
+  After any compaction or manual session restart, `/imortal` picks up from the same file.
+- `/conc` Step 1 surfaces pending build tasks automatically — so a new session will
+  remind the founder to run `/imortal` if builds are pending.
+- HR is the sole builder. `/imortal` is the scheduler and state manager only.
