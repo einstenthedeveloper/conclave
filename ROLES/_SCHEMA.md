@@ -108,6 +108,18 @@
 
 ---
 
+## Skill Dependencies
+(which skills from ~/.claude/commands/skills/ does this agent load?)
+
+| Skill file | Classification | When loaded |
+|---|---|---|
+| [skill-name].md | REQUIRED / CONTEXTUAL | [step or condition] |
+
+Skills missing from the library that must be created before this agent can be compiled:
+- [skill-name] — [why it's needed, what framework it covers]
+
+---
+
 ## Relations with Other Roles
 
 | Role | Relation | Direction |
@@ -138,6 +150,7 @@
 - [ ] Calibration present: 1 good output + 1 shallow output
 - [ ] MCPs section complete: ESSENTIAL classified, system status declared
 - [ ] MCP upgrade path documented: current tool + upgrade trigger + install command
+- [ ] Skill dependency map: skills listed, classified REQUIRED/CONTEXTUAL, gaps identified
 
 ---
 

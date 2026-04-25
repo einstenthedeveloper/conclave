@@ -6,7 +6,9 @@ MAX_QUESTIONS = 3
 HALT_THRESHOLD = 0.40
 QUESTION_TYPE = binary | constrained
 EXECUTION_ORDER = sequential
-PARALLEL_ALLOWED = false (unless dependency_overlap = none)
+PARALLEL_ALLOWED = false (unless dependency_overlap = none AND percent_used < 50)
+MAX_STRATEGY_FORKS_PER_SESSION = 1
+MAX_CONSULTATION_EXCHANGES = 3
 
 ## DOCUMENT REGISTRY
 VISION.md           owner=CHAIRMAN          required=true     stage=always
@@ -77,13 +79,86 @@ TRIGGER: experiment failed | revenue=0 | ICP non-response | assumption invalidat
 ACTION: re-activate owner agent of failed document only
 RULES: agent re-reads all documents before deciding | VISION.md never updated in iteration | CEO logs every iteration
 
+## TOKEN_BUDGET_PROTOCOL
+TOOL: conclave-usage-mcp → usage/current
+CALL: before any parallel activation decision
+THRESHOLDS:
+  percent_used < 50   → recommendation = parallel    (eligible if dependency_overlap = none)
+  percent_used 50–70  → recommendation = sequential  (sequential always)
+  percent_used 70–85  → recommendation = sequential_warn (sequential + notify founder)
+  percent_used > 85   → recommendation = pause        (write Execution State, instruct /conc new session)
+FALLBACK: if conclave-usage-mcp not installed → default sequential
+
+## STRATEGY_FORK_PROTOCOL
+TRIGGER: strategic fork where consequence_level = HIGH
+         (affects 2+ downstream agents OR sets a founding constraint)
+LIMIT: max 1 per session; lower-consequence forks use binary question protocol
+FORMAT:
+  [STRATEGIC DECISION — {topic}]
+  Option A: {name}
+    Approach: {1 sentence}
+    Advantage: {primary win in this founder's context}
+    Tradeoff: {what is sacrificed or deferred}
+    Downstream: {how this constrains other agents}
+  Option B: {same structure}
+  Option C: {same structure}
+  Recommended: Option [X] — {1-sentence rationale tied to VISION.md context}
+  Which do you choose? (A / B / C)
+POST_SELECTION:
+  [You chose Option X.]
+  Accepted advantage: {what this unlocks}
+  Accepted tradeoffs: {what you are trading away}
+  Mitigation approach: {how the system reduces tradeoff impact}
+  → Decision locked in EXECUTION_PLAN.md. Will not be re-asked.
+FORK_MAP:
+  CHAIRMAN  → market category (new category / existing / subcategory)
+  CEO       → activation sequence (sequential / parallel given budget and dependency map)
+  CTO       → architecture posture (API-first / full-stack / embedded)
+  CMO       → GTM motion (PLG / sales-led / community-led)
+  CRO       → pricing model (usage-based / seat-based / outcome-based)
+
+## CONSULTATION_PROTOCOL
+TRIGGER: C-level has high-confidence strategy but wants specialist validation before writing document
+ALLOWED: CMO → Social Media Manager | Traffic Manager
+         CTO → Design CTO
+         CEO → any C-level (conflict pre-resolution)
+FORMAT:
+  Agent({
+    description: "Validate [decision] against [domain]",
+    subagent_type: "[agent-name]",
+    prompt: "C-level draft decision: [X]. Does this create a blocker for your domain?
+             Return: CLEAR (no blocker) | BLOCKER (specific issue + recommended resolution).
+             Under 200 tokens."
+  })
+RULES:
+  - Specialist returns CLEAR or BLOCKER in < 200 tokens
+  - C-level incorporates response before writing document
+  - Maximum 3 exchanges per consultation — terminate if unresolved → UNRESOLVED_HYPOTHESIS
+  - Specialists do not write C-level documents — they validate only
+  - Token cost per consultation: ~1,500–4,000 tokens (vs 6,000–15,000 for conflict re-run)
+
+## PARALLEL_MAP
+ELIGIBLE pairs (no dependency overlap):
+  CMO + CRO        (both depend only on VISION.md + EXECUTION_PLAN.md)
+  CTO + CLO        (both depend only on VISION.md + EXECUTION_PLAN.md)
+INELIGIBLE pairs (dependency overlap):
+  CMO + Design CTO (Design CTO requires GTM.md from CMO)
+  CTO + CISO       (CISO requires TECH.md from CTO)
+  CMO + Traffic Manager (Traffic Manager requires GTM.md from CMO)
+CONDITION: parallel activation requires dependency_overlap = none AND percent_used < 50
+
 ## FORBIDDEN
 - Agent writing another agent's document
 - Agent asking open-ended question
 - Agent leaving field empty (use UNRESOLVED_HYPOTHESIS)
 - CEO activating agent before dependencies exist
 - Parallel execution with dependency overlap
+- Parallel execution when percent_used ≥ 50
 - System continuing after BLOCKED without founder resolution
 - VISION.md updated outside /conclave session
 - CFO activation before post_mvp stage
 - Dual values on any field after conflict resolution
+- Agent applying a framework from memory — load the skill file
+- Activating an agent without including skill routing in the CEO brief
+- More than 1 STRATEGY_FORK_PROTOCOL per session
+- Consultation exchange exceeding 3 rounds — escalate to UNRESOLVED_HYPOTHESIS

@@ -1,0 +1,18 @@
+{
+  "name": "conclave-usage-mcp",
+  "version": "1.0.0",
+  "description": "MCP server that reads local Claude Code JSONL files and returns token budget data for the current session.",
+  "main": "src/index.js",
+  "bin": {
+    "conclave-usage-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": ["mcp", "claude", "conclave", "token-budget"],
+  "author": "einstenrodriguesdev",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -257,3 +257,48 @@ All above + SECURITY.md + PRODUCT.md + FINANCE.md
 - No founder input is assumed — absent signals trigger questions, not invention
 - The Chairman never returns — vision updates require a new /conclave session
 - CFO never activates before first sale
+
+---
+
+## 11. v2 Architecture Pillars
+
+### Pillar 1 — Skills System (token efficiency)
+
+Agents load frameworks on demand via the Read tool. Skills are `.md` files in `~/.claude/commands/skills/`. Each skill is 200–400 tokens of pure protocol — no agent identity, no preamble.
+
+**Token savings:** agents load only the skills relevant to their current task. Estimated 60–75% reduction in per-agent token consumption vs. embedding all frameworks in the agent file.
+
+**CEO as skill router:** when briefing each agent, CEO identifies which skills are relevant to the project context and includes `SKILL ROUTING: REQUIRED / CONTEXTUAL` in the brief.
+
+### Pillar 2 — 3-Strategy Decision Protocol
+
+When an agent encounters a HIGH-consequence strategic fork (affects 2+ downstream agents or sets a founding constraint), it presents 3 named options with Approach, Advantage, Tradeoff, and Downstream impact — not an open question. Maximum 1 per session. After the founder selects, the decision is locked in EXECUTION_PLAN.md and never re-asked.
+
+### Pillar 3 — C-Level ↔ Specialist Consultation
+
+Before writing its output document, a C-level can spawn a specialist subagent via the Agent tool to validate its draft decisions. The specialist returns CLEAR or BLOCKER in < 200 tokens. Token cost per consultation: ~1,500–4,000 tokens vs. 6,000–15,000 for a conflict-triggered document re-run.
+
+Allowed: CMO → Social Media Manager | Traffic Manager. CTO → Design CTO. CEO → any C-level.
+
+### Pillar 4 — Cron-Based Token Efficiency
+
+Social Media Manager: weekly planning session (1× per week, ~3,000 tokens) + daily execution crons (~800 tokens each). 55% token savings vs. batching all posts in one session.
+
+HR: creates 90-day review crons at agent-approval time.
+
+### Pillar 5 — Token Budget Awareness (conclave-usage-mcp)
+
+`conclave-usage-mcp` is a Node.js stdio MCP server that reads `~/.claude/projects/[project]/[session-id].jsonl`, sums token usage, and returns `{tokens_used, plan_limit, percent_used, recommendation}`. CEO calls this before deciding parallel vs. sequential activation.
+
+### Pillar 6 — State Recovery
+
+CEO writes `## Execution State` to EXECUTION_PLAN.md after every agent activation. `/conc` reads this block on session start and resumes from the first pending agent — surviving CLI restarts and session crashes with at most 1 agent re-run.
+
+### Pillar 7 — Execution Adapters (pluggable)
+
+Core (agents + skills + queue) is adapter-agnostic. Three adapters:
+- **Local** — runs in Claude Code CLI, manual `/conc` activations, desktop crons
+- **Scheduled VPS** — Claude Code CLI on a VPS + cron daemon, desktop routines persist across restarts
+- **Telegram** — mobile interface, commands forwarded to VPS Claude Code instance
+
+All adapters share the same core. Agents are blind to the executor.

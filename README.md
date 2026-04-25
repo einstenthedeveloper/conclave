@@ -8,33 +8,39 @@ Conclave is an agentic business orchestration framework for solo founders. It tr
 npm i conclave-cc@latest
 ```
 
-The postinstall script copies all agents, commands, and system documents into `~/.claude/`, making them available globally in every Claude Code session. Role research templates are copied to `ROLES/` in your project directory.
+The postinstall script copies all agents, the skills library, the usage MCP, and system documents into `~/.claude/`. Role research templates are copied to `ROLES/` in your project directory.
+
+**After installation, run once:**
+
+```bash
+# Register the token budget MCP
+claude mcp add conclave-usage -- node ~/.claude/conclave-usage-mcp/src/index.js
+
+# Set your plan limit in CONCLAVE_SYSTEM.md (Pro / Max5 / Max20)
+# PLAN_LIMIT: 44000   ← Pro
+# PLAN_LIMIT: 88000   ← Max5
+# PLAN_LIMIT: 220000  ← Max20
+```
 
 ## Usage
 
 ```
-/conclave "your project intention"
+/conc "your project intention"
 ```
 
-The Chairman runs the full intake protocol and writes `VISION.md`. Then:
-
-```
-/ceo
-```
-
-The CEO reads `VISION.md`, applies the activation matrix, writes `EXECUTION_PLAN.md`, and outputs the exact command sequence to run next. Follow the CEO's instructions — run each agent command in order, then re-run `/ceo` after each one.
+`/conc` is the single entry point. It checks for pending tasks in `conclave-queue.json`, checks for a prior session's Execution State in `EXECUTION_PLAN.md`, then runs the Chairman if no `VISION.md` exists or the CEO if it does.
 
 Example session:
 
 ```
-/conclave "my project"   → Chairman writes VISION.md
-/ceo                     → CEO writes EXECUTION_PLAN.md, outputs: run /cto
-/cto                     → CTO writes TECH.md
-/ceo                     → conflict check, outputs: run /cmo
-/cmo                     → CMO writes GTM.md
-/ceo                     → conflict check, outputs: run /traffic-manager
-/traffic-manager         → Traffic Manager writes TRAFFIC.md (paid + organic + prospecting plan)
-/ceo                     → all documents complete, system status = READY
+/conc "my project"         → Chairman writes VISION.md
+/conc                      → CEO writes EXECUTION_PLAN.md, outputs: run /cto
+/cto                       → CTO writes TECH.md (+ optional Design CTO consultation)
+/conc                      → CEO conflict check, outputs: run /cmo
+/cmo                       → CMO writes GTM.md (+ Social Media Manager + Traffic Manager consultation)
+/conc                      → CEO conflict check, outputs: run /cro
+/cro                       → CRO writes REVENUE.md
+/conc                      → all documents complete, system status = READY
 ```
 
 ## What you get
@@ -54,29 +60,66 @@ Example session:
 ## Agent system
 
 **Core pipeline (CEO-activated):**
-- **Chairman** — Vision extraction. Runs the two-layer intake protocol. Writes `VISION.md`.
-- **CEO** — Orchestration. Reads signals, applies activation matrix, sequences agents, resolves conflicts. Writes `EXECUTION_PLAN.md`.
-- **CTO** — Technical architecture. Stack, delivery model, observability, fallback, security surface.
-- **CMO** — Go-to-market. ICP, channel, positioning, acquisition motion.
-- **Traffic Manager** — Acquisition sequencing. Three-lane plan: paid traffic, organic growth, and prospecting — with founder-context timing and CAC payback calculations. Writes `TRAFFIC.md`.
-- **CRO** — Revenue model. Pricing, paywall, first sale target, LTV hypothesis.
+- **Chairman** — Vision extraction. Two-layer intake protocol. Writes `VISION.md`. Uses 3-Strategy Protocol for market category selection.
+- **CEO** — Orchestration. Reads signals, applies activation matrix, sequences agents, routes skills, resolves conflicts. Checks token budget before parallel activation. Writes `EXECUTION_PLAN.md`.
+- **CTO** — Technical architecture. Stack, delivery model, observability, fallback, security surface. Consults Design CTO before writing. Uses 3-Strategy Protocol for architecture posture.
+- **CMO** — Go-to-market. ICP, channel, positioning, acquisition motion. Consults Social Media Manager + Traffic Manager before writing. Uses 3-Strategy Protocol for GTM motion.
+- **Traffic Manager** — Channel hypothesis execution. 30-day test protocol, full-cost CAC, LTV:CAC gate. Writes `TRAFFIC.md`.
+- **CRO** — Revenue model. Pricing, paywall, first sale target, LTV hypothesis. Uses 3-Strategy Protocol for pricing model.
 - **CLO** — Commercial & legal. Entity structure, IP, contracts, compliance.
-- **CISO** — Security & trust. Threat model, trust signals, minimum security posture.
-- **Design CTO** — Experience layer. Onboarding, conversion design, perception requirements.
+- **CISO** — Security & trust. Threat model (STRIDE), trust signals, minimum security posture. Writes `SECURITY.md`.
+- **Design CTO** — Experience layer. Onboarding, conversion design, perception requirements. Writes `PRODUCT.md`.
 
 **Operational agents (founder-activated):**
-- **Social Media Manager** — Content execution. Publishes scheduled posts via `interface-controller` MCP, maintains `calendar.json`, logs results, produces weekly performance reports with volume/quality/business metrics.
-- **HR** — Role research and compilation. Researches real job postings, synthesizes validated role docs (`ROLES/[role].md`), and compiles production-ready agent files (`agents/[role].md`) with real market substance.
+- **Social Media Manager** — Content execution. Weekly planning + daily crons (55% token savings). Content batch per 50/30/20 mix. Engagement-first measurement.
+- **HR** — Role research and compilation. Researches real job postings, validates 10-item checklist, compiles `agents/[role].md`. Maps skill dependencies. Schedules 90-day reviews.
+
+## Skills Library
+
+Agents load frameworks on demand — not pre-loaded. 15 skills included:
+
+| Skill | Framework |
+|---|---|
+| `positioning` | April Dunford 10-step |
+| `jtbd-interview` | JTBD interview protocol |
+| `stride-threat` | STRIDE threat modeling |
+| `ltv-cac-gate` | LTV:CAC ≥ 3 acquisition gate |
+| `value-based-pricing` | ProfitWell value pricing |
+| `fogg-behavior` | Fogg B=MAP conversion framework |
+| `content-mix` | 50/30/20 content mix protocol |
+| `document-dont-create` | GaryVee documenting protocol |
+| `safe-agreement` | YC SAFE structure |
+| `equity-vesting` | 4-year vest / 1-year cliff |
+| `mvp-architecture` | Minimum Viable Architecture |
+| `tech-debt-quadrant` | Technical Debt Quadrant |
+| `aha-moment` | Aha Moment Protocol |
+| `channel-hypothesis` | Channel hypothesis execution |
+| `luxury-acquisition` | High-ticket acquisition sequence |
+
+CEO routes the relevant skills to each agent brief. Agents load them via Read tool at the relevant step.
+
+## Token Budget
+
+`conclave-usage-mcp` reads your local session JSONL and returns `{tokens_used, plan_limit, percent_used, recommendation}`. CEO calls this before activating agents in parallel.
+
+- < 50% used → parallel eligible
+- 50–70% → sequential
+- 70–85% → sequential + warning
+- > 85% → pause, write Execution State, resume with `/conc` in a new session
+
+Session state is written to `EXECUTION_PLAN.md` after every agent activation, so restarting Claude Code never loses more than one agent's work.
+
+## 3-Strategy Decision Protocol
+
+When a HIGH-consequence strategic fork is detected (affects 2+ downstream agents), the relevant agent presents 3 named options with Approach, Advantage, Tradeoff, and Downstream impact — not an open question. Maximum 1 per session. Decision is locked after selection.
 
 ## Interface Controller MCP
 
-The Social Media Manager uses `interface-controller` — a local Playwright MCP server for browser automation. To register it after installation:
+For automated posting via Social Media Manager, register the `interface-controller` Playwright MCP:
 
 ```bash
 claude mcp add interface-controller python ~/.claude/interface-controller/server.py
 ```
-
-This enables automated posting, session management, and execution logging via browser.
 
 ## Philosophy
 
@@ -88,8 +131,8 @@ This enables automated posting, session management, and execution logging via br
 
 **Deterministic output.** Every agent session ends in a written document — never in reflection, summary, or open loop.
 
-**Sovereignty by inevitability.** Every signal is filtered through five structural questions before being recorded as a decision. Signals that fail the filter become unresolved hypotheses — not closed decisions.
+**Token efficiency by design.** Skills loaded on demand. Cron-based execution for operational agents. Token budget awareness built into CEO orchestration.
 
-## v0.3.0 scope
+## v0.5.0 scope
 
-This release includes Chairman, CEO, CTO, CMO, Traffic Manager, CRO, CLO, CISO, Design CTO, Social Media Manager, and HR. CFO and full financial modeling (`FINANCE.md`) are planned for the next release (post-MVP, funding intent only).
+This release adds: skills library (15 skill files), CEO skill routing, 3-Strategy Decision Protocol across 5 agents, C-level ↔ specialist consultation, cron-based Social Media Manager pattern, `conclave-usage-mcp` token budget server, and `/conc` as the unified entry point with state recovery. CFO and full financial modeling are planned for post-MVP stage.

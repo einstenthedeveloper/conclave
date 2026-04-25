@@ -53,7 +53,7 @@ The system operates at the business coherence layer: vision, ICP, moat, revenue,
 
 | Agent | Output | Activation condition |
 |---|---|---|
-| **Social Media Manager** | execution_log.json + weekly report | BRAND.md exists + GTM.md defines organic channel |
+| **Social Media Manager** | Weekly content batch + engagement report | GTM.md exists + organic channel defined |
 | **Branding & Concept Strategist** | `BRAND.md` | CMO requests after GTM.md |
 | **Copywriter** | copy per channel | CMO requests after BRAND.md |
 | **Instagram Designer** | SVG/PNG assets | Content cycle begins |
@@ -216,7 +216,54 @@ Output: `ROLES/[role].md` (research doc) → checklist validation → `agents/[r
 
 ---
 
-## 10. Build Sequence (for system construction)
+## 10. Skills Library
+
+Every agent in this system loads frameworks on demand from `~/.claude/commands/skills/`. Skills are not embedded in agents — they are separate protocol files loaded via Read tool when the agent reaches the relevant step.
+
+**Available skills:**
+
+| Skill file | Framework | Loaded by |
+|---|---|---|
+| `positioning.md` | April Dunford 10-step positioning | CMO |
+| `jtbd-interview.md` | JTBD interview protocol (Christensen/Moesta) | CMO, Chairman |
+| `stride-threat.md` | STRIDE threat modeling | CISO |
+| `ltv-cac-gate.md` | LTV:CAC ≥ 3 acquisition gate | CEO, CRO, Traffic Manager |
+| `value-based-pricing.md` | ProfitWell value pricing protocol | CRO |
+| `fogg-behavior.md` | Fogg B=MAP conversion framework | Design CTO |
+| `content-mix.md` | 50/30/20 content mix protocol | Social Media Manager |
+| `document-dont-create.md` | GaryVee documenting protocol | Social Media Manager |
+| `safe-agreement.md` | YC SAFE agreement structure | CLO |
+| `equity-vesting.md` | 4-year vest / 1-year cliff structure | CLO |
+| `mvp-architecture.md` | Minimum Viable Architecture protocol | CTO |
+| `tech-debt-quadrant.md` | Technical Debt Quadrant framework | CTO |
+| `aha-moment.md` | Aha Moment Protocol (Samuel Hulick) | Design CTO |
+| `channel-hypothesis.md` | Channel hypothesis execution protocol | CMO, Traffic Manager |
+| `luxury-acquisition.md` | 5-step luxury/high-ticket acquisition | CMO, CRO |
+
+**Skill routing:** CEO identifies relevant skills per project context and includes `SKILL ROUTING: REQUIRED / CONTEXTUAL` in every agent brief.
+
+---
+
+## 11. Session Configuration
+
+Set once per installation. CEO and conclave-usage-mcp read these values.
+
+```
+PLAN: Pro | Max5 | Max20
+PLAN_LIMIT: 44000        ← Pro = 44,000 | Max5 = 88,000 | Max20 = 220,000 tokens/5h window
+EXECUTION_MODE: local | scheduled_vps | telegram
+```
+
+**Where to set:** add these lines to the `## Session Configuration` section of your project's CONCLAVE_SYSTEM.md after installation. The `conclave-usage-mcp` server reads `PLAN_LIMIT` from `~/.claude/CONCLAVE_SYSTEM.md` to calibrate the token budget protocol.
+
+**Install conclave-usage-mcp** (run once after `npm install conclave-cc`):
+```bash
+claude mcp add conclave-usage -- node ~/.claude/conclave-usage-mcp/src/index.js
+```
+
+---
+
+## 12. Build Sequence (for system construction)
 
 Build in this order. Each layer depends on the previous being complete.
 
@@ -231,7 +278,7 @@ Frontend Developer, Backend Developer, QA Engineer, Copywriter, Instagram Design
 
 ---
 
-## 11. Chairman Matrix (portfolio allocation)
+## 13. Chairman Matrix (portfolio allocation)
 
 When multiple projects compete for founder attention, Chairman applies this scoring matrix before any CEO activation.
 
