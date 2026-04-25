@@ -14,8 +14,8 @@ If `queue` array has entries with `status: "pending"` and `scheduled_for` ≤ to
   Execute each pending task in order before continuing.
   Update each entry to `status: "done"` after execution.
 If any entries have `type: "agent-build"` and `status: "pending"`:
-  Report count and next slug. Instruct founder: "Run `/imortal` to continue the agent build queue."
-  Do NOT auto-execute build tasks from /conc — they run via /imortal only.
+  Report count and next slug. Instruct founder: "Run `/immortal-genesis` to continue the agent build queue."
+  Do NOT auto-execute build tasks from /conc — they run via /immortal-genesis only.
 
 **Step 2 — Chairman review check**
 Read `VISION.md` if it exists.
