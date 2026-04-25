@@ -9,6 +9,7 @@
     "agents/",
     "commands/",
     "conclave-usage-mcp/",
+    "knowledge/",
     "templates/",
     "ROLES/",
     "ARCHITECTURE.md",

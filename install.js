@@ -7,14 +7,16 @@ try {
   const agentsDir = path.join(claudeDir, 'agents');
   const commandsDir = path.join(claudeDir, 'commands');
   const skillsDir = path.join(commandsDir, 'skills');
+  const knowledgeDir = path.join(claudeDir, 'knowledge');
   const pkgDir = __dirname;
 
   // Ensure directories
-  for (const dir of [agentsDir, commandsDir, skillsDir]) {
+  for (const dir of [agentsDir, commandsDir, skillsDir, knowledgeDir]) {
     fs.mkdirSync(dir, { recursive: true });
   }
   console.log(`✓ Ensured ~/.claude/agents/`);
   console.log(`✓ Ensured ~/.claude/commands/skills/`);
+  console.log(`✓ Ensured ~/.claude/knowledge/`);
 
   // Copy agents/
   for (const file of fs.readdirSync(path.join(pkgDir, 'agents'))) {
@@ -52,6 +54,18 @@ try {
   if (fs.existsSync(mcpSrc)) {
     copyDirRecursive(mcpSrc, mcpDest);
     console.log(`✓ conclave-usage-mcp → ${mcpDest}`);
+  }
+
+  // Copy knowledge/ library to ~/.claude/knowledge/
+  const knowledgeSrc = path.join(pkgDir, 'knowledge');
+  if (fs.existsSync(knowledgeSrc)) {
+    for (const file of fs.readdirSync(knowledgeSrc)) {
+      const src = path.join(knowledgeSrc, file);
+      if (fs.statSync(src).isFile()) {
+        fs.copyFileSync(src, path.join(knowledgeDir, file));
+        console.log(`✓ knowledge/${file}`);
+      }
+    }
   }
 
   // Copy system docs to ~/.claude/
