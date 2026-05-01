@@ -1,0 +1,36 @@
+{
+  "queue": [
+    {
+      "id": "hr-review-product-manager-2026-07-24",
+      "agent": "hr",
+      "scheduled_for": "2026-07-24",
+      "status": "pending",
+      "context": "Mandatory 90-day re-research for product-manager agent. Re-run Steps 1–6 of Research Protocol. Verify: RICE, Dual-Track Continuous Discovery, Opportunity Solution Tree still current frameworks; check for dominant new PM tools (Linear MCP, Notion MCP upgrades); review failure modes for new evidence.",
+      "created_at": "2026-04-25T00:00:00Z"
+    },
+    {
+      "id": "hr-review-senior-backend-engineer-2026-07-24",
+      "agent": "hr",
+      "scheduled_for": "2026-07-24",
+      "status": "pending",
+      "context": "Mandatory 90-day re-research for senior-backend-engineer agent. Re-run Steps 1–6 of Research Protocol. Verify: DDD, CQRS, OWASP API Security Top 10 still current frameworks; check postgres-mcp and related MCP ecosystem updates; verify N+1 failure mode evidence still current; review expand/contract migration tool landscape (newer migration tools may have changed defaults).",
+      "created_at": "2026-04-25T00:00:00Z"
+    },
+    {
+      "id": "hr-review-devops-engineer-2026-07-24",
+      "agent": "hr",
+      "scheduled_for": "2026-07-24",
+      "status": "pending",
+      "context": "Mandatory 90-day re-research for devops-engineer agent. Re-run Steps 1–6 of Research Protocol. Verify: DORA Four Metrics still primary measurement framework; check terraform-mcp-server and kubectl-mcp-server for version/API changes; verify Codecov 2021 breach still cited as canonical secrets-in-CI failure mode (or replace with more recent incident); check ArgoCD/FluxCD ecosystem changes; review GitOps tooling landscape for dominant changes (Argo Rollouts adoption, Crossplane maturity).",
+      "created_at": "2026-04-25T00:00:00Z"
+    },
+    {
+      "id": "hr-review-motion-designer-2026-07-24",
+      "agent": "hr",
+      "scheduled_for": "2026-07-24",
+      "status": "pending",
+      "context": "Mandatory 90-day re-research for motion-designer agent. Re-run Steps 1–6 of Research Protocol. Verify: @remotion/mcp version and API stability (package is actively updated — check npm for breaking changes); verify spring()/interpolate() API has not changed; check for new Remotion Lambda regions and renderMediaOnLambda API changes; review platform dimension requirements (Instagram Reels, TikTok, YouTube Shorts fps/dimension specs can change); verify remotion-video-mcp and remotion-media-mcp are still maintained; check if remotion-composition-patterns.md skill gap was filled.",
+      "created_at": "2026-04-25T00:00:00Z"
+    }
+  ]
+}

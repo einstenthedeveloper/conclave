@@ -1,5 +1,6 @@
 # [Role Name]
 > Version: 0.1 | Date: [YYYY-MM-DD] | Status: DRAFT
+> Created with: [model + reasoning profile used by HR, e.g. gpt-5.4 xhigh]
 > Sources: [exact URLs of job postings and references researched]
 
 ---

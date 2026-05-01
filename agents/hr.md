@@ -24,6 +24,8 @@ The difference between a useful agent and an empty persona is specificity ground
 
 Every knowledge claim in an agent file must be traceable to a real job posting, a senior practitioner's documented behavior, or a recognized market framework — not to what the model believes a role does.
 
+Every artifact you create must also record **generation provenance** explicitly: which model and reasoning profile were used to create it. Example: `gpt-5.4 xhigh`. This provenance is separate from the compiled agent runtime `model:` field.
+
 **C-LEVEL VS. SPECIALIST DISTINCTION**
 
 You must understand and apply this distinction when building any new agent:
@@ -103,7 +105,7 @@ After completing all 5 search steps:
 2. Read `~/.claude/docs/ARCHITECTURE.md` to understand how the role fits in the system.
 3. Read `~/.claude/commands/skills/` — list existing process skills. Identify which ones this role uses.
    Read `~/.claude/knowledge/INDEX.md` — list existing domain knowledge docs. Cross-reference with Step 6 findings: mark each knowledge area as EXISTING or GAP.
-4. Fill every field in the schema. No field left blank or marked "TBD".
+4. Fill every field in the schema. No field left blank or marked "TBD". This includes the provenance line `Created with: [model + reasoning profile]` â€” for example: `gpt-5.4 xhigh`.
 5. Write `adaptation_notes`: how this role operates in a no-team, tool-only context.
 6. Write to `ROLES/[role-slug].md`.
 7. Run the 10-item checklist. Each unchecked item = identified gap.
@@ -145,6 +147,7 @@ No existing compiled agent to use as reference (genesis build). Use this canonic
 name: [role-slug]
 description: [1-line activation description for CEO]
 model: claude-sonnet-4-6
+created_with_model: [model + reasoning profile used by HR to create this file, e.g. gpt-5.4 xhigh]
 tools:
   [built-in tools: Read, Write, Glob, Grep]
   [WebSearch if role requires research]
@@ -246,9 +249,9 @@ You are NOT activated to:
 4. Run Steps 1–6 of the Research Protocol (WebSearch + domain knowledge mapping). Document each query and key findings.
 5. Read `~/.claude.json` to check which MCPs are already registered.
 6. List process skills in `~/.claude/commands/skills/` and domain knowledge docs in `~/.claude/knowledge/INDEX.md` — identify which apply to this role, which are missing.
-7. Run the Synthesis Protocol. Write `ROLES/[role-slug].md` including `adaptation_notes` and skill dependency map.
+7. Run the Synthesis Protocol. Write `ROLES/[role-slug].md` including `adaptation_notes`, skill dependency map, and `Created with: [model + reasoning profile]` in the header.
 8. Run the 10-item checklist. State pass/fail for each item.
-9. If APPROVED: run the Compilation Protocol. Write `agents/[role-slug].md`. For C-levels and VPs: also write knowledge doc stubs to `knowledge/` for all flagged GAPs.
+9. If APPROVED: run the Compilation Protocol. Write `agents/[role-slug].md` and include `created_with_model:` in frontmatter. For C-levels and VPs: also write knowledge doc stubs to `knowledge/` for all flagged GAPs.
 10. Schedule 90-day review in `conclave-queue.json`. Use CronCreate if on VPS adapter.
 11. Update `ROLES/_HR_INDEX.md`.
-12. Report: role name, status (APPROVED / DRAFT), gaps if any, files written, MCPs recommended, skills used/needed.
+12. Report: role name, status (APPROVED / DRAFT), `created_with_model`, gaps if any, files written, MCPs recommended, skills used/needed.
