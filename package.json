@@ -1,20 +1,22 @@
 {
   "name": "conclave-cc",
-  "version": "0.5.0",
-  "description": "Agentic business orchestration framework for solo founders. Installs the full Conclave agent system globally in Claude Code — Chairman, CEO, CTO, CMO, CRO, CLO, CISO, Design CTO, Traffic Manager, Social Media Manager, and HR — each research-grounded and producing a VC-ready due diligence document package.",
+  "version": "1.0.0",
+  "description": "Agentic business orchestration framework for solo founders. Installs the full Conclave system (133 agents — Chairman, CEO, all C-levels, VPs, Directors, specialists) globally in Claude Code, with bundled in-house MCPs (token usage awareness, browser automation) and a stage-gated workflow that produces a VC-ready due diligence document package end-to-end.",
   "scripts": {
     "postinstall": "node install.js"
   },
   "files": [
     "agents/",
     "commands/",
-    "conclave-usage-mcp/",
     "docs/",
     "knowledge/",
-    "templates/",
+    "mcp/",
     "ROLES/",
+    "templates/",
+    "architecture.md",
     "install.js",
-    "README.md"
+    "README.md",
+    "SECURITY.md"
   ],
   "keywords": [
     "claude",
@@ -24,11 +26,11 @@
     "conclave",
     "due-diligence",
     "startup",
-    "hr",
-    "social-media",
-    "traffic",
-    "workflow",
-    "orchestration"
+    "founder",
+    "orchestration",
+    "mcp",
+    "agentic",
+    "workflow"
   ],
   "author": "einstenthedeveloper",
   "license": "MIT",
@@ -42,5 +44,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "pnpm@10.33.2"
 }
