@@ -40,12 +40,22 @@ function cwdToProjectDir(cwd) {
   return (cwd || '').replace(/[:\\/\s]/g, '-');
 }
 
-// Read PLAN_LIMIT from ~/.claude/CONCLAVE_SYSTEM.md.
-// Looks for a line containing "PLAN_LIMIT:" followed by a number.
-// Falls back to 44000 (Pro plan default).
+// Read PLAN_LIMIT from the installed Conclave system document.
+// Prefer ~/.claude/CONCLAVE_SYSTEM.md for backward compatibility,
+// then fall back to ~/.claude/docs/CONCLAVE_SYSTEM.md, which is where
+// the installer copies the file today. Falls back to 44000 otherwise.
+function findPlanConfigPath() {
+  const candidates = [
+    path.join(CLAUDE_DIR, 'CONCLAVE_SYSTEM.md'),
+    path.join(CLAUDE_DIR, 'docs', 'CONCLAVE_SYSTEM.md')
+  ];
+
+  return candidates.find((candidate) => fs.existsSync(candidate)) || null;
+}
+
 function readPlanLimit() {
-  const docPath = path.join(CLAUDE_DIR, 'CONCLAVE_SYSTEM.md');
-  if (!fs.existsSync(docPath)) return 44000;
+  const docPath = findPlanConfigPath();
+  if (!docPath) return 44000;
 
   try {
     const content = fs.readFileSync(docPath, 'utf8');

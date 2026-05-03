@@ -254,7 +254,7 @@ PLAN_LIMIT: 44000        ← Pro = 44,000 | Max5 = 88,000 | Max20 = 220,000 toke
 EXECUTION_MODE: local | scheduled_vps | telegram
 ```
 
-**Where to set:** add these lines to the `## Session Configuration` section of your project's CONCLAVE_SYSTEM.md after installation. The `conclave-usage-mcp` server reads `PLAN_LIMIT` from `~/.claude/CONCLAVE_SYSTEM.md` to calibrate the token budget protocol.
+**Where to set:** add these lines to the `## Session Configuration` section of your project's CONCLAVE_SYSTEM.md after installation. The `conclave-usage-mcp` server reads `PLAN_LIMIT` from `~/.claude/CONCLAVE_SYSTEM.md` and falls back to `~/.claude/docs/CONCLAVE_SYSTEM.md`, which is where the installer copies the file today.
 
 **Install conclave-usage-mcp** (run once after `npm install conclave-cc`):
 ```bash
